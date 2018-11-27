@@ -5,6 +5,7 @@ from flask_jwt_extended import JWTManager
 from resources.cat import Cat, ListCats, ListAdoptedCats, IsAdopted, TakenCatname
 from resources.user import User, ListUsers, UserLogin, TokenRefresh, SuperUser, AdoptCat, TakenUsername
 from models.user import UserModel
+import os
 
 app = Flask(__name__)
 app.secret_key = 'MY_SECRET_KEY :p'   # a secret key must be specified

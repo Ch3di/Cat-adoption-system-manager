@@ -72,6 +72,7 @@ catname keyword is a unique identifier for a given cat.
 
 
 * \[DELETE\]: _/user/\<username\>_
+
       Deletes an existing user.
       If the request succeeds, the returned JSON will contain:
         - "message": "user deleted"
@@ -147,6 +148,7 @@ catname keyword is a unique identifier for a given cat.
       Note: an access token of an admin user is required to access this endpoint
 
 * \[GET\]: _/taken/\<username\>_
+
       Indicates if a username has already taken or not. This endpoint is useful to tell the new user if this username is available or not before he creates his account
       If the username has already been taken, the returned JSON will contain:
         - "taken": true
@@ -244,6 +246,7 @@ catname keyword is a unique identifier for a given cat.
       Note: no access token is required to access this endpoint
 
 * \[GET\]: _/isadopted/\<catname\>_
+
       Returns a message indicates if the cat has already been adopted or not.
       If the cat has already been adopted, the returned JSON will contain:
         - "message": "This cat is adopted by \<The Full name of the adopter\>"
@@ -257,6 +260,7 @@ catname keyword is a unique identifier for a given cat.
       Note: no access token is required to access this endpoint
 
 * \[GET\]: _/taken/\<catname\>_
+
       Indicates if a catname has already taken or not. This endpoint is useful to tell the user if the catname is available or not before he creates a cat object
       If the catname has already been taken, the returned JSON will contain:
         - "taken": true

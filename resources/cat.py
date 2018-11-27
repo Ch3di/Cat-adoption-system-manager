@@ -33,7 +33,6 @@ class Cat(Resource):
             data['ageY'] = data['age-year']
         user_json = get_jwt_identity()
         cat = CatModel(catname, user_json['user-id'], **data)
-        print 'hi ' + data['ageM']
         cat.saveToDB()
         return cat.json(), 201
 

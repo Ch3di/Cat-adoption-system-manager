@@ -10,7 +10,7 @@ class UserModel(db.Model):
     address = db.Column(db.String(80))
     email = db.Column(db.String(50))
     phone = db.Column(db.String(20))
-    password = db.Column(db.String(80), nullable = False)
+    password = db.Column(db.String(100), nullable = False)
     cats = db.relationship('CatModel', lazy='dynamic')
     admin =  db.Column(db.Boolean)
 

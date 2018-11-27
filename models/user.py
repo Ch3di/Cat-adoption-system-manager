@@ -10,6 +10,7 @@ class UserModel(db.Model):
     address = db.Column(db.String(80))
     password = db.Column(db.String(80), nullable = False)
     cats = db.relationship('CatModel', lazy='dynamic')
+    admin =  db.Column(db.Boolean)
 
     def __init__(self, username, firstName, lastName, address, password):
         self.username = username
@@ -17,7 +18,7 @@ class UserModel(db.Model):
         self.lastName = lastName
         self.address = address
         self.password = password
-
+        self.admin = False
     @classmethod
     def findUserByUsername(cls, username):
         return cls.query.filter_by(username=username).first()
@@ -27,7 +28,7 @@ class UserModel(db.Model):
         return cls.query.filter_by(id=id).first()
 
     def json(self):
-        return { 'user-id': self.id ,'username': self.username, 'firstName': self.firstName, 'lastName': self.lastName, 'address': self.address, 'added-cats' : [cat.json() for cat in self.cats.all()], 'adopted-cats' : [] }
+        return { 'user-id': self.id , 'admin': self.admin,'username': self.username, 'firstName': self.firstName, 'lastName': self.lastName, 'address': self.address, 'added-cats' : [cat.json() for cat in self.cats.all()], 'adopted-cats' : [] }
 
     def saveToDB(self):
         db.session.add(self)
@@ -36,6 +37,10 @@ class UserModel(db.Model):
     def deleteFromDB(self):
         db.session.delete(self)
         db.session.commit()
+
+    def makeUserAdmin(self):
+        self.admin = True
+        self.saveToDB()
 
     @staticmethod
     def generateHash(password):

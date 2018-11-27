@@ -62,7 +62,11 @@ class UserLogin(Resource):
     def post(self, username):
         data = UserLogin.parser.parse_args()
         user = UserModel.findUserByUsername(username)
-        if user and UserModel.verifyHash(data['password'], user.password):
+        try:
+            isCorrect = UserModel.verifyHash(data['password'], user.password)
+        except:
+            isCorrect = False
+        if user and isCorrect:
             access_token = create_access_token(identity = user.json())
             refresh_token = create_refresh_token(identity = user.json())
             return {
@@ -71,3 +75,15 @@ class UserLogin(Resource):
                 'refresh-token': refresh_token
                 }
         return { 'message': "username or password is not correct" }
+
+class SuperUser(Resource):
+    @jwt_required
+    def post(self, username):
+        user_json = get_jwt_identity()
+        if user_json['admin'] == False:
+            return { "message": "You must be a super user to grant priviliges to other users" }, 400
+        user = UserModel.findUserByUsername(username)
+        if user:
+            user.makeUserAdmin()
+            return { "message" : "{} is now an admin".format(user.username) }, 200
+        return { "message": "The requested user does not existed" }

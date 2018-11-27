@@ -1,0 +1,525 @@
+{
+	"info": {
+		"_postman_id": "4a012fcd-c494-45b7-b65e-171ebafe5eda",
+		"name": "Cat adoption",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/cat/<catname>",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{uri}}/cat/<catname>",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"cat",
+						"<catname>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cat/taken/<catname>",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{uri}}/cat/taken/<catname>",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"cat",
+						"taken",
+						"<catname>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cat/<catname>",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer <JWT>",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"adopted\": false,\n    \"img_url\": \"http://cat.com/kitty.png\",\n    \"name\": \"MIMI\",\n    \"sex\": \"M\"\n}"
+				},
+				"url": {
+					"raw": "{{uri}}/cat/<catname>",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"cat",
+						"<catname>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cat/<catname>",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"adopted\": false,\n    \"img_url\": \"http://cat.com/kitty.png\",\n    \"name\": \"MIMI\",\n    \"sex\": \"M\"\n}"
+				},
+				"url": {
+					"raw": "{{uri}}/cat/<catname>",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"cat",
+						"<catname>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cat/<catname>",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{uri}}/cat/<catname>",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"cat",
+						"<catname>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cats",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{uri}}/cats",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"cats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cats/adopted",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{uri}}/cats/adopted",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"cats",
+						"adopted"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/isadopted/<catname>",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{uri}}/isadopted/<catname>",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"isadopted",
+						"<catname>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/<username>",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{uri}}/user/<username>",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"user",
+						"<username>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/taken/<username>",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{uri}}/user/taken/<username>",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"user",
+						"taken",
+						"<username>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/<username>",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"fn\",\n    \"lastName\": \"ln\",\n    \"address\": \"here\",\n    \"password\": \"secretpass\"\n}"
+				},
+				"url": {
+					"raw": "{{uri}}/user/<username>",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"user",
+						"<username>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/<username>",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"fn\",\n    \"lastName\": \"ln\",\n    \"address\": \"here\",\n    \"password\": \"secretpass\"\n}"
+				},
+				"url": {
+					"raw": "{{uri}}/user/<username>",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"user",
+						"<username>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/<username>",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <JWT>",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{uri}}/user/<username>",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"user",
+						"<username>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/grant/<username>",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer  <JWT>",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{uri}}/user/grant/<username>",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"user",
+						"grant",
+						"<username>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer <JWT>",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{uri}}/users",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/refresh",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer <Refresh-JWT>",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{uri}}/refresh",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/login/<username>",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"password\":\"secretpass\"\n}"
+				},
+				"url": {
+					"raw": "{{uri}}/login/<username>",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"login",
+						"<username>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/adopt/<catname>",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{uri}}/adopt/<catname>",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"adopt",
+						"<catname>"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

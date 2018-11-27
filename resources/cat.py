@@ -4,12 +4,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from models.cat import CatModel
 
 class Cat(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument('name', type=str, required=True, help="This field cannot be left blank")
-    parser.add_argument('img_url', type=str, required=True, help="This field cannot be left blank")
-    parser.add_argument('adopted', type=bool, required=True, help="This field cannot be left blank")
-    parser.add_argument('sex', type=str, required=True, help="This field cannot be left blank")
-
 # get, post, delete must be reviewed to check the identity of the user
     def get(self,catname):
         cat = CatModel.findCatsByCatname(catname)
@@ -19,36 +13,74 @@ class Cat(Resource):
 
     @jwt_required
     def post(self,catname):
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str, required=True, help="This field cannot be left blank")
+        parser.add_argument('img_url', type=str, required=True, help="This field cannot be left blank")
+        parser.add_argument('adopted', type=bool, required=True, help="This field cannot be left blank")
+        parser.add_argument('sex', type=str, required=True, help="This field cannot be left blank")
+        parser.add_argument('color', type=str, required=True, help="This field cannot be left blank")
+        parser.add_argument('age-day', type=str)
+        parser.add_argument('age-month', type=str)
+        parser.add_argument('age-year', type=str)
         if CatModel.findCatsByCatname(catname):
             return { 'message': 'This catname has already taken'}, 400
-        data = Cat.parser.parse_args()
+        data = parser.parse_args()
+        if data['age-day']:
+            data['ageD'] = data['age-day']
+        if data['age-month']:
+            data['ageM'] = data['age-month']
+        if data['age-year']:
+            data['ageY'] = data['age-year']
         user_json = get_jwt_identity()
         cat = CatModel(catname, user_json['user-id'], **data)
+        print 'hi ' + data['ageM']
         cat.saveToDB()
         return cat.json(), 201
 
     @jwt_required
     def put(self,catname):
-        data = Cat.parser.parse_args()
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str)
+        parser.add_argument('img_url', type=str)
+        parser.add_argument('adopted', type=bool)
+        parser.add_argument('sex', type=str)
+        parser.add_argument('color', type=str)
+        parser.add_argument('age-day', type=str)
+        parser.add_argument('age-month', type=str)
+        parser.add_argument('age-year', type=str)
+        data = parser.parse_args()
         user_json = get_jwt_identity()
         cat = CatModel.findCatsByCatname(catname)
-        if cat and cat.owner_id == user_json['user-id']:
-            cat.name=data['name']
-            cat.img_url=data['img_url']
-            cat.adopted=data['adopted']
-            cat.sex = data['sex']
-        elif cat and cat.owner_id != user_json['user-id']:
-            return { 'message': 'This catname has already taken or permission denied' }, 400
+        if cat and cat.owner_id != user_json['user-id']:
+            return { 'message': "Not permitted action" }, 401
+        elif cat and cat.owner_id == user_json['user-id']:
+            if data['name']:
+                cat.name = data['name']
+            if data['img_url']:
+                cat.img_url = data['img_url']
+            if data['adopted']:
+                cat.adopted=data['adopted']
+            if data['sex']:
+                cat.sex = data['sex']
+            if data['color']:
+                cat.color = data['color']
+            if data['age-day']:
+                cat.ageD = data['age-day']
+            if data['age-month']:
+                cat.ageM = data['age-month']
+            if data['age-year']:
+                cat.ageY = data['age-year']
+            cat.saveToDB()
+            return cat.json()
         else:
-            cat = CatModel(catname, user_json['user-id'], **data)
-        cat.saveToDB()
-        return cat.json()
+            return { 'message': 'cat not found'}, 404
+
 
     @jwt_required
     def delete(self,catname):
         cat = CatModel.findCatsByCatname(catname)
         user_json = get_jwt_identity()
-        if cat and cat.owner_id == user_json['user-id']:
+        if cat and (cat.owner_id == user_json['user-id'] or user_json['admin'] == True):
             cat.deleteFromDB()
             return { 'message': 'cat was deleted successfully' }, 202
         elif cat and cat.owner_id != user_json['user-id']:
@@ -76,4 +108,11 @@ class IsAdopted(Resource):
             else:
                 return { 'message': 'This cat is not adopted by anyone. Please adopt it'}, 200
         else:
-            return { 'message': 'Couldn\'t find the requested cat'}, 404
+            return { 'message': 'Could not find the requested cat'}, 404
+
+class TakenCatname(Resource):
+    def get(self, catname):
+        cat = CatModel.findCatsByCatname(catname)
+        if cat:
+            return { 'taken': True }, 400
+        return {'taken': False}

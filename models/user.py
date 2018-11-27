@@ -8,16 +8,20 @@ class UserModel(db.Model):
     firstName = db.Column(db.String(40))
     lastName = db.Column(db.String(40))
     address = db.Column(db.String(80))
+    email = db.Column(db.String(50))
+    phone = db.Column(db.String(20))
     password = db.Column(db.String(80), nullable = False)
     cats = db.relationship('CatModel', lazy='dynamic')
     admin =  db.Column(db.Boolean)
 
-    def __init__(self, username, firstName, lastName, address, password):
+    def __init__(self, username, firstName, lastName, address, password, email=None, phone=None):
         self.username = username
         self.firstName = firstName
         self.lastName = lastName
         self.address = address
         self.password = password
+        self.email = email
+        self.phone = phone
         self.admin = False
     @classmethod
     def findUserByUsername(cls, username):
@@ -28,7 +32,18 @@ class UserModel(db.Model):
         return cls.query.filter_by(id=id).first()
 
     def json(self):
-        return { 'user-id': self.id , 'admin': self.admin,'username': self.username, 'first-name': self.firstName, 'last-name': self.lastName, 'address': self.address, 'added-cats' : [cat.json() for cat in self.cats.all()], 'adopted-cats' : [cat.json() for cat in CatModel.query.all() if cat.adopter_id == self.id] }
+        return {
+            'user-id': self.id,
+            'admin': self.admin,
+            'username': self.username,
+            'first-name': self.firstName,
+            'last-name': self.lastName,
+            'address': self.address,
+            'email': self.email,
+            'phone': self.phone,
+            'added-cats' : [cat.json() for cat in self.cats.all()],
+            'adopted-cats' : [cat.json() for cat in CatModel.query.all() if cat.adopter_id == self.id]
+        }
 
     def saveToDB(self):
         db.session.add(self)

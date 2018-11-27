@@ -4,8 +4,8 @@ from flask_jwt import JWT
 from flask_jwt_extended import JWTManager
 from security import authenticate, identify
 from db import db
-from resources.cat import Cat, ListCats, ListAdoptedCats, IsAdopted
-from resources.user import User, ListUsers, UserLogin, SuperUser, AdoptCat
+from resources.cat import Cat, ListCats, ListAdoptedCats, IsAdopted, TakenCatname
+from resources.user import User, ListUsers, UserLogin, TokenRefresh, SuperUser, AdoptCat, TakenUsername
 from models.user import UserModel
 
 app = Flask(__name__)
@@ -26,6 +26,10 @@ api.add_resource(UserLogin, '/login/<string:username>')
 api.add_resource(SuperUser, '/user/grant/<string:username>')
 api.add_resource(AdoptCat, '/adopt/<string:catname>')
 api.add_resource(IsAdopted, '/isadopted/<string:catname>')
+api.add_resource(TokenRefresh, '/refresh')
+api.add_resource(TakenCatname, '/cat/taken/<string:catname>')
+api.add_resource(TakenUsername, '/user/taken/<string:username>')
+
 @app.before_first_request # execute the following function before the first request
 def create_tables():
     db.create_all()

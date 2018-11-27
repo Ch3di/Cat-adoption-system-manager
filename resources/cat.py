@@ -61,4 +61,17 @@ class ListCats(Resource):
 
 class ListAdoptedCats(Resource):
     def get(self):
-        return { 'adopted-cats': [cat.json() for cat in CatModel.query.all()] }
+        return { 'adopted-cats': [cat.json() for cat in CatModel.query.all() if cat.adopted = True] }
+
+
+class IsAdopted(Resource):
+    # improve this function to indicate the name of the adopter
+    def get(self, catname):
+        cat = CatModel.findCatsByCatname(catname)
+        if cat:
+            if cat.adopted:
+                return { 'message': 'This cat is adopted by {}'.format(cat.adopter_id) }, 200
+            else:
+                return { 'message': 'This cat is not adopted by anyone. Please adopt it'}, 200
+        else:
+            return { 'message': 'Couldn\'t find the requested cat'}, 404

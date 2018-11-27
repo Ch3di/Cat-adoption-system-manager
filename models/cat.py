@@ -10,6 +10,7 @@ class CatModel(db.Model):
     adopted = db.Column(db.Boolean)
     sex = db.Column(db.CHAR)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    adopter_id = db.Column(db.Integer)
     user = db.relationship('UserModel')
 
     def __init__(self, catname, owner_id, name, img_url, adopted, sex):
@@ -19,10 +20,11 @@ class CatModel(db.Model):
         self.adopted = adopted
         self.sex = sex
         self.owner_id = owner_id
+        self.adopter_id = None
 
     def json(self):
         # don't forget to add owner_id to json
-        return { 'name': self.name, 'img_url': self.img_url, 'adopted': self.adopted, 'sex': self.sex }
+        return { 'name': self.name, 'img_url': self.img_url, 'adopted': self.adopted, 'sex': self.sex, 'owner': self.owner_id, 'adopter': self.adopter_id }
 
     @classmethod
     def findCatsByName(cls,name):

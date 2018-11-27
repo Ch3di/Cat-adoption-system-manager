@@ -1,6 +1,6 @@
 from db import db
 from passlib.hash import pbkdf2_sha256 as sha256
-
+from models.cat import CatModel
 class UserModel(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -28,7 +28,7 @@ class UserModel(db.Model):
         return cls.query.filter_by(id=id).first()
 
     def json(self):
-        return { 'user-id': self.id , 'admin': self.admin,'username': self.username, 'firstName': self.firstName, 'lastName': self.lastName, 'address': self.address, 'added-cats' : [cat.json() for cat in self.cats.all()], 'adopted-cats' : [] }
+        return { 'user-id': self.id , 'admin': self.admin,'username': self.username, 'firstName': self.firstName, 'lastName': self.lastName, 'address': self.address, 'added-cats' : [cat.json() for cat in self.cats.all()], 'adopted-cats' : [cat.json() for cat in CatModel.query.all() if cat.adopter_id == self.id] }
 
     def saveToDB(self):
         db.session.add(self)

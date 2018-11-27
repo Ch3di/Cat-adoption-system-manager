@@ -1,7 +1,7 @@
 from flask_restful import reqparse, Resource
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt, jwt_required
 from models.user import UserModel
-
+from models.cat import CatModel
 
 
 class User(Resource):
@@ -44,12 +44,18 @@ class User(Resource):
         user.saveToDB()
         return user.json()
 
+    # only admin can delete other users
+    # the user can delete his account too
+    @jwt_required
     def delete(self, username):
-        user = UserModel.findUserByUsername(username)
-        if user:
-            user.deleteFromDB()
-            return { 'message': 'user deleted' }, 202
-        return { 'message': 'the requested user is not found' }, 404
+        admin_json = get_jwt_identity()
+        if admin_json['admin'] == True or admin_json['username']== username:
+            user = UserModel.findUserByUsername(username)
+            if user:
+                user.deleteFromDB()
+                return { 'message': 'user deleted' }, 202
+            return { 'message': 'the requested user is not found' }, 404
+        return { 'message': 'permission is not permitted. You need admin priviliges to delete a user'}, 400
 
 class ListUsers(Resource):
     def get(self):
@@ -73,8 +79,8 @@ class UserLogin(Resource):
                 'message': 'Logged in as {}'.format(user.username),
                 'access-token': access_token,
                 'refresh-token': refresh_token
-                }
-        return { 'message': "username or password is not correct" }
+                }, 200
+        return { 'message': "username or password is not correct" }, 400
 
 class SuperUser(Resource):
     @jwt_required
@@ -87,3 +93,18 @@ class SuperUser(Resource):
             user.makeUserAdmin()
             return { "message" : "{} is now an admin".format(user.username) }, 200
         return { "message": "The requested user does not existed" }
+
+class AdoptCat(Resource):
+    @jwt_required
+    def post(self, catname):
+        user_json = get_jwt_identity()
+        cat = CatModel.findCatsByCatname(catname)
+        if cat and cat.adopter_id is None:
+            cat.adopter_id = user_json['user-id']
+            cat.adopted = True
+            cat.saveToDB()
+            return { 'message': 'congratulation ! Thank you for adopting {}'.format(catname) }, 200
+        elif cat and cat.adopter_id is not None:
+            return { 'message': 'This cat has already adopted ! Thanks anyway'}, 400
+        else:
+            return { 'message': 'could not find the requested cat' }, 404

@@ -284,6 +284,9 @@ catname keyword is a unique identifier for a given cat.
 * Flask-JWT
 
       $ pip install Flask-JWT
+* Flask-JWT-Extended
+
+      $ pip install flask-jwt-extended
 * uwsgi
 
       $ pip install uwsgi

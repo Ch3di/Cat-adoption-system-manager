@@ -5,3 +5,4 @@ Flask-SQLAlchemy
 Flask-JWT
 uwsgi
 psycopg2
+flask-jwt-extended

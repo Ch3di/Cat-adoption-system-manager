@@ -1,13 +1,14 @@
 from db import db
+from passlib.hash import pbkdf2_sha256 as sha256
 
 class UserModel(db.Model):
     __tablename__ = 'users'
-    user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80))
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), nullable = False)
     firstName = db.Column(db.String(40))
     lastName = db.Column(db.String(40))
     address = db.Column(db.String(80))
-    password = db.Column(db.String(80))
+    password = db.Column(db.String(80), nullable = False)
 
 
     def __init__(self, username, firstName, lastName, address, password):
@@ -35,3 +36,12 @@ class UserModel(db.Model):
     def deleteFromDB(self):
         db.session.delete(self)
         db.session.commit()
+
+    @staticmethod
+    def generateHash(password):
+        return sha256.hash(password)
+
+    @staticmethod
+    def verifyHash(password, hash):
+        return sha256.verify(password, hash)
+    

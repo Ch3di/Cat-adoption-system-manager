@@ -23,6 +23,7 @@ class User(Resource):
         if user:
             return { 'message': 'the user has already existed'}, 400
         data = User.parser.parse_args()
+        data['password'] = UserModel.generateHash(data['password'])
         user = UserModel(username, **data)
         user.saveToDB()
         return user.json()
@@ -35,8 +36,9 @@ class User(Resource):
             user.firstName = data['firstName']
             user.lastName = data['lastName']
             user.address = data['address']
-            user.password = data['password']
+            user.password = UserModel.generateHash(data['password'])
         else:
+            data['password'] = UserModel.generateHash(data['password'])
             user = UserModel(username, **data)
         user.saveToDB()
         return user.json()

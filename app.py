@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
-#from security import authenticate, identify
+from security import authenticate, identify
 from db import db
 from resources.cat import Cat, ListCats, ListAdoptedCats
 from resources.user import User, ListUsers
@@ -13,7 +13,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db"
 
 
 api = Api(app)
-#jwt = JWT(app, authenticate, identify)
+jwt = JWT(app, authenticate, identify)
 
 api.add_resource(ListCats, '/cats')
 api.add_resource(ListAdoptedCats, '/cats/adopted')

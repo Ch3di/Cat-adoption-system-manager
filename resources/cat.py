@@ -61,7 +61,7 @@ class ListCats(Resource):
 
 class ListAdoptedCats(Resource):
     def get(self):
-        return { 'adopted-cats': [cat.json() for cat in CatModel.query.all() if cat.adopted = True] }
+        return { 'adopted-cats': [cat.json() for cat in CatModel.query.all() if cat.adopted == True] }
 
 
 class IsAdopted(Resource):
@@ -70,7 +70,9 @@ class IsAdopted(Resource):
         cat = CatModel.findCatsByCatname(catname)
         if cat:
             if cat.adopted:
-                return { 'message': 'This cat is adopted by {}'.format(cat.adopter_id) }, 200
+                from models.user import UserModel
+                adopter = UserModel.findUserById(cat.adopter_id)
+                return { 'message': 'This cat is adopted by {}'.format(adopter.firstName + ' ' + adopter.lastName) }, 200
             else:
                 return { 'message': 'This cat is not adopted by anyone. Please adopt it'}, 200
         else:

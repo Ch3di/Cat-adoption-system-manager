@@ -28,7 +28,7 @@ class UserModel(db.Model):
         return cls.query.filter_by(id=id).first()
 
     def json(self):
-        return { 'user-id': self.id , 'admin': self.admin,'username': self.username, 'firstName': self.firstName, 'lastName': self.lastName, 'address': self.address, 'added-cats' : [cat.json() for cat in self.cats.all()], 'adopted-cats' : [cat.json() for cat in CatModel.query.all() if cat.adopter_id == self.id] }
+        return { 'user-id': self.id , 'admin': self.admin,'username': self.username, 'first-name': self.firstName, 'last-name': self.lastName, 'address': self.address, 'added-cats' : [cat.json() for cat in self.cats.all()], 'adopted-cats' : [cat.json() for cat in CatModel.query.all() if cat.adopter_id == self.id] }
 
     def saveToDB(self):
         db.session.add(self)

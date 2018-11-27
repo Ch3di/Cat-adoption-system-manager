@@ -1,5 +1,5 @@
 from db import db
-#from model.user import UserModel
+
 
 class CatModel(db.Model):
     __tablename__ = 'cats'
@@ -24,7 +24,35 @@ class CatModel(db.Model):
 
     def json(self):
         # don't forget to add owner_id to json
-        return { 'name': self.name, 'img_url': self.img_url, 'adopted': self.adopted, 'sex': self.sex, 'owner': self.owner_id, 'adopter': self.adopter_id }
+        from models.user import UserModel
+        owner = UserModel.findUserById(self.owner_id)
+        if self.adopted:
+            adopter = UserModel.findUserById(self.adopter_id)
+            return {
+                self.catname: {
+                    'name': self.name,
+                    'img_url': self.img_url,
+                    'adopted': self.adopted,
+                    'sex': self.sex,
+                    'owner-id': self.owner_id,
+                    'owner-username': owner.username,
+                    'owner-name': owner.firstName + ' ' + owner.lastName,
+                    'adopter-id': self.adopter_id,
+                    'adopter-username': adopter.username,
+                    'adopter-name': adopter.firstName + ' ' + adopter.lastName
+                }
+            }
+        return {
+            self.catname: {
+                'name': self.name,
+                'img_url': self.img_url,
+                'adopted': self.adopted,
+                'sex': self.sex,
+                'owner-id': self.owner_id,
+                'owner-username': owner.username,
+                'owner-name': owner.firstName + ' ' + owner.lastName,
+            }
+        }
 
     @classmethod
     def findCatsByName(cls,name):
@@ -41,3 +69,6 @@ class CatModel(db.Model):
     def deleteFromDB(self):
         db.session.delete(self)
         db.session.commit()
+
+    def isAdopted(self):
+        return cat.adopted

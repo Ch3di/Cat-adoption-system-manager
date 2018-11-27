@@ -1,6 +1,6 @@
 from db import db
 from app import app
-
+from models.user import UserModel
 
 @app.before_first_request # execute the following function before the first request
 def create_tables():

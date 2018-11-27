@@ -1,0 +1,7 @@
+passlib
+Flask
+Flask-RESTful
+Flask-SQLAlchemy
+Flask-JWT
+uwsgi
+psycopg2

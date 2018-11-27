@@ -19,7 +19,7 @@ api.add_resource(ListCats, '/cats')
 api.add_resource(ListAdoptedCats, '/cats/adopted')
 api.add_resource(Cat, '/cat/<string:catname>')
 api.add_resource(ListUsers, '/users')
-api.add_resource(User, '/user/<string:name>')
+api.add_resource(User, '/user/<string:username>')
 
 
 @app.before_first_request # execute the following function before the first request

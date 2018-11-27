@@ -1,26 +1,27 @@
 from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
+from flask_jwt_extended import JWTManager
 from security import authenticate, identify
 from db import db
 from resources.cat import Cat, ListCats, ListAdoptedCats
-from resources.user import User, ListUsers
+from resources.user import User, ListUsers, UserLogin
 
 app = Flask(__name__)
 app.secret_key = 'MY_SECRET_KEY :p'   # a secret key must be specified
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db"
-
+app.config['JWT_SECRET_KEY'] = 'jwt-secret-string'
 
 api = Api(app)
-jwt = JWT(app, authenticate, identify)
+jwt = JWTManager(app)
 
 api.add_resource(ListCats, '/cats')
 api.add_resource(ListAdoptedCats, '/cats/adopted')
 api.add_resource(Cat, '/cat/<string:catname>')
 api.add_resource(ListUsers, '/users')
 api.add_resource(User, '/user/<string:username>')
-
+api.add_resource(UserLogin, '/login/<string:username>')
 
 @app.before_first_request # execute the following function before the first request
 def create_tables():

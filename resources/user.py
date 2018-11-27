@@ -1,6 +1,5 @@
 from flask_restful import reqparse, Resource
-from flask_jwt import jwt_required
-
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt, jwt_required
 from models.user import UserModel
 
 
@@ -12,8 +11,10 @@ class User(Resource):
     parser.add_argument('address', type=str, required=True, help="This field cannot be left blank")
     parser.add_argument('password', type=str, required=True, help="This field cannot be left blank")
 
+    @jwt_required
     def get(self,username):
-        user = UserModel.findUserByUsername(username)
+        user_json = get_jwt_identity()
+        user = UserModel.findUserByUsername(user_json['username'])
         if user:
             return user.json()
         return { 'message': 'user not found'}, 404
@@ -52,4 +53,21 @@ class User(Resource):
 
 class ListUsers(Resource):
     def get(self):
-        return { 'users': [user.json() for user in UserModel.query.all()] }
+        return { 'users': [ { user.username : user.json() } for user in UserModel.query.all()] }
+
+class UserLogin(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('password', type=str, required=True, help="You cannot login without a password")
+
+    def post(self, username):
+        data = UserLogin.parser.parse_args()
+        user = UserModel.findUserByUsername(username)
+        if user and UserModel.verifyHash(data['password'], user.password):
+            access_token = create_access_token(identity = user.json())
+            refresh_token = create_refresh_token(identity = user.json())
+            return {
+                'message': 'Logged in as {}'.format(user.username),
+                'access-token': access_token,
+                'refresh-token': refresh_token
+                }
+        return { 'message': "username or password is not correct" }

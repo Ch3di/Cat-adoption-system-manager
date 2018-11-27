@@ -1,5 +1,5 @@
 from flask_restful import reqparse, Resource
-from flask_jwt import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from models.cat import CatModel
 
@@ -17,33 +17,43 @@ class Cat(Resource):
             return cat.json()
         return { 'message': 'cat not found'}, 404
 
+    @jwt_required
     def post(self,catname):
         if CatModel.findCatsByCatname(catname):
-            return { 'message': 'This cat has already existed'}, 400
+            return { 'message': 'This catname has already taken'}, 400
         data = Cat.parser.parse_args()
-        cat = CatModel(catname,**data)
+        user_json = get_jwt_identity()
+        cat = CatModel(catname, user_json['user-id'], **data)
         cat.saveToDB()
-        return cat.json(),201
+        return cat.json(), 201
 
+    @jwt_required
     def put(self,catname):
         data = Cat.parser.parse_args()
+        user_json = get_jwt_identity()
         cat = CatModel.findCatsByCatname(catname)
-        if cat:
+        if cat and cat.owner_id == user_json['user-id']:
             cat.name=data['name']
             cat.img_url=data['img_url']
             cat.adopted=data['adopted']
             cat.sex = data['sex']
+        elif cat and cat.owner_id != user_json['user-id']:
+            return { 'message': 'This catname has already taken or permission denied' }, 400
         else:
-            cat = CatModel(catname,**data)
+            cat = CatModel(catname, user_json['user-id'], **data)
         cat.saveToDB()
         return cat.json()
 
+    @jwt_required
     def delete(self,catname):
         cat = CatModel.findCatsByCatname(catname)
-        if cat:
+        user_json = get_jwt_identity()
+        if cat and cat.owner_id == user_json['user-id']:
             cat.deleteFromDB()
-            return { 'message': 'cat was deleted successfully' }
-        return { 'message': 'cat not found' }, 202
+            return { 'message': 'cat was deleted successfully' }, 202
+        elif cat and cat.owner_id != user_json['user-id']:
+            return { 'message': 'You must be the original owner to delete this cat' }
+        return { 'message': 'cat not found' }, 404
 
 class ListCats(Resource):
     def get(self):

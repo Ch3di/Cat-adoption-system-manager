@@ -9,7 +9,7 @@ class UserModel(db.Model):
     lastName = db.Column(db.String(40))
     address = db.Column(db.String(80))
     password = db.Column(db.String(80), nullable = False)
-
+    cats = db.relationship('CatModel', lazy='dynamic')
 
     def __init__(self, username, firstName, lastName, address, password):
         self.username = username
@@ -27,7 +27,7 @@ class UserModel(db.Model):
         return cls.query.filter_by(id=id).first()
 
     def json(self):
-        return { 'username': self.username, 'firstName': self.firstName, 'lastName': self.lastName, 'address': self.address, 'added-cats' : [], 'adopted-cats' : [] }
+        return { 'user-id': self.id ,'username': self.username, 'firstName': self.firstName, 'lastName': self.lastName, 'address': self.address, 'added-cats' : [cat.json() for cat in self.cats.all()], 'adopted-cats' : [] }
 
     def saveToDB(self):
         db.session.add(self)
@@ -44,4 +44,3 @@ class UserModel(db.Model):
     @staticmethod
     def verifyHash(password, hash):
         return sha256.verify(password, hash)
-    

@@ -9,16 +9,16 @@ class CatModel(db.Model):
     img_url = db.Column(db.String(256))
     adopted = db.Column(db.Boolean)
     sex = db.Column(db.CHAR)
-#    owner_id = db.Column(db.Integer, db.ForeignKey('user_id'))
-#    user = db.relationship('userModel')
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('UserModel')
 
-    def __init__(self, catname, name, img_url, adopted, sex):
+    def __init__(self, catname, owner_id, name, img_url, adopted, sex):
         self.catname = catname
         self.name = name
         self.img_url = img_url
         self.adopted = adopted
         self.sex = sex
-#        self.owner_id = owner_id
+        self.owner_id = owner_id
 
     def json(self):
         # don't forget to add owner_id to json
